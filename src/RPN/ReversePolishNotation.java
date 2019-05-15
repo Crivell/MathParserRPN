@@ -72,22 +72,30 @@ public class ReversePolishNotation {
                     }
                     stack.pop();
                 }else{
+                    if(stack.size()>0){
+                        while(stack.size() > 0 && operatorPriority(stack.peek())>= operatorPriority(buf)){
+                            out.push(stack.pop());
+                        }
+                    }
+                    //Todo Piorytet dzialan
+
                     stack.push(buf);        //włóż o1 na stos operatorów.
                 }
             }
         }
 
-//        for (String op : out) {     //Jeśli nie ma więcej symboli do przeczytania, zdejmuj wszystkie symbole ze stosu (jeśli jakieś są) i dodawaj je do kolejki wyjścia. (Powinny to być wyłącznie operatory)
-//            stack.add(op);
-//        }
-        for (String op : stack) {     //Jeśli nie ma więcej symboli do przeczytania, zdejmuj wszystkie symbole ze stosu (jeśli jakieś są) i dodawaj je do kolejki wyjścia. (Powinny to być wyłącznie operatory)
-            out.add(op);
+
+        int size = stack.size();
+        for(int i=0;i<size;i++){     //Jeśli nie ma więcej symboli do przeczytania, zdejmuj wszystkie symbole ze stosu (jeśli jakieś są) i dodawaj je do kolejki wyjścia. (Powinny to być wyłącznie operatory)
+            out.push(stack.pop());
         }
-        Stack<String> buf = new Stack<>();
-        int size = out.size();
+
+        Stack<String> buf = new Stack<>();          //Todo metoda do odwracania stosu
+        size = out.size();
         for(int i=0;i<size;i++){
             buf.push(out.pop());
         }
+
         return buf;
     }
 
@@ -106,33 +114,33 @@ public class ReversePolishNotation {
                 buf.push(topOfStack);
             }else{   // jeśli i-ty symbol jest operatorem to:
 
-                BigDecimal a = new BigDecimal(buf.pop());   // zdejmij ze stosu jeden element (ozn. a),
+                BigDecimal a = new BigDecimal(buf.pop().replace(',','.'));   // zdejmij ze stosu jeden element (ozn. a),
 
 
                 switch (valueOfOperator(topOfStack)){
 
                     case ADD:{
-                        BigDecimal b = new BigDecimal(buf.pop());   // zdejmij ze stosu kolejny element (ozn. b),;
+                        BigDecimal b = new BigDecimal(buf.pop().replace(',','.'));   // zdejmij ze stosu kolejny element (ozn. b),;
                         a = a.add(b);
                         break;
                     }
                     case SUB:{
-                        BigDecimal b = new BigDecimal(buf.pop());   // zdejmij ze stosu kolejny element (ozn. b),;
+                        BigDecimal b = new BigDecimal(buf.pop().replace(',','.'));   // zdejmij ze stosu kolejny element (ozn. b),;
                         a = b.subtract(a);
                         break;
                     }
                     case MUL:{
-                        BigDecimal b = new BigDecimal(buf.pop());   // zdejmij ze stosu kolejny element (ozn. b),;
+                        BigDecimal b = new BigDecimal(buf.pop().replace(',','.'));   // zdejmij ze stosu kolejny element (ozn. b),;
                         a = a.multiply(b);
                         break;
                     }
                     case DIV:{
-                        BigDecimal b = new BigDecimal(buf.pop());   // zdejmij ze stosu kolejny element (ozn. b),;
-                            a = a.divide(b);
+                        BigDecimal b = new BigDecimal(buf.pop().replace(',','.'));   // zdejmij ze stosu kolejny element (ozn. b),;
+                            a = b.divide(a);
                             break;
                     }
                     case POW:{
-                        BigDecimal b = new BigDecimal(buf.pop());   // zdejmij ze stosu kolejny element (ozn. b),;
+                        BigDecimal b = new BigDecimal(buf.pop().replace(',','.'));   // zdejmij ze stosu kolejny element (ozn. b),;
                         a = a.pow(Integer.valueOf(b.toString()));
                         break;
                     }
@@ -175,12 +183,12 @@ public class ReversePolishNotation {
     }
 
     public boolean isNumber(String st){
-        try{
-            BigDecimal bigDecimal = new BigDecimal(st);
-        }catch(Exception e){
-            return false;
-        }
-        return true;
+
+            Scanner scanner = new Scanner(st);
+            if(scanner.hasNextDouble() || scanner.hasNextBigDecimal()){
+                return true;
+            }
+        return false;
     }
 
     private Operator valueOfOperator(String st){
@@ -242,5 +250,50 @@ public class ReversePolishNotation {
         while(!st.empty()){
             st.pop();
         }
+    }
+
+    private int operatorPriority(String st){
+        if(st.equals("(")){
+            return 0;
+        }
+        switch(valueOfOperator(st)){
+            case ADD:{
+                return 1;
+            }
+            case SUB:{
+                return 1;
+            }
+            case MUL:{
+                return 2;
+            }
+            case DIV:{
+                return 2;
+            }
+            case POW:{
+                return 3;
+            }
+            case PER:{
+                return 2;
+            }
+            case SQRT:{
+                return 3;
+            }
+            case SIN:{
+                return 3;
+            }
+            case COS:{
+                return 3;
+            }
+            case TAN:{
+                return 3;
+            }
+            case LN:{
+                return 3;
+            }
+            case LOG:{
+                return 3;
+            }
+        }
+        return 0;
     }
 }
