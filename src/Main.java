@@ -6,16 +6,11 @@ import java.util.Stack;
 
 public class Main {
     public static void main(String[] args) {
-        ReversePolishNotation r = new ReversePolishNotation();
-        Stack<String> st = new Stack<>();
-        
-        st = r.createStack("2 * 1 + 2 * 3 ");
-        for (String str:st) {
-            System.out.println(str);
-        }
-
-
-        System.out.println(r.solve(st));
+        System.out.println(ReversePolishNotation.solveEq("1 + ( 2 + 1 ) * 10 "));
+        System.out.println(ReversePolishNotation.solveEq("10 * ( 2 + 1 ) + 1"));
+        System.out.println(ReversePolishNotation.solveEq("10 * ( 2 + 1 ) + 1 + ln 10"));
+        System.out.println(ReversePolishNotation.solveEq("10 * ( 2 + 1 ) + 1 + ln 10"));
+        System.out.println(ReversePolishNotation.solveEq("10 * ( 2 + 1 ) + 3 * ln 10"));
 
 
     }
