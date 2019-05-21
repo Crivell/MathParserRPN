@@ -1,6 +1,7 @@
 package RPN;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Scanner;
 import java.util.Stack;
 
@@ -134,7 +135,7 @@ public class ReversePolishNotation {
                     }
                     case DIV: {
                         BigDecimal b = new BigDecimal(buf.pop().replace(',', '.'));   // zdejmij ze stosu kolejny element (ozn. b),;
-                        a = b.divide(a);
+                        a = b.divide(a,9,RoundingMode.HALF_UP);
                         break;
                     }
                     case POW: {
